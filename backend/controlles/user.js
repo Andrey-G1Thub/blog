@@ -55,7 +55,7 @@ function updateUser(id, userData) {
   return User.findByIdAndUpdate(
     id,
     userData,
-    { role: userData.roleId },
+    { role: userData.role },
     { returnDocument: 'after' }
   )
 }

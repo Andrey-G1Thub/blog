@@ -72,15 +72,22 @@ router.post(
   upload.single('image'),
   async (req, res) => {
     try {
+      let finalImage
+
+      if (req.file) {
+        finalImage = `/uploads/${req.file.filename}` //файл в приаритете
+      } else if (req.body.imageUrl && req.body.imageUrl.trim() !== '') {
+        finalImage = req.body.imageUrl
+      }
+
       const newPost = await addPost({
         title: req.body.title,
         content: req.body.content,
-        image: req.file ? `/uploads/${req.file.filename}` : req.body.imageUrl,
+        image: finalImage,
       })
 
       res.send({ data: mapPost(newPost) })
     } catch (e) {
-      console.error('Ошибка создания поста:', e)
       res.send({ error: e.message || 'Ошибка сервера' })
     }
   }
